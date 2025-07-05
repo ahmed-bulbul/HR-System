@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR System Architecture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mxgraph/4.2.2/js/mxClient.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .architecture-section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #34495e;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .component-card {
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .component-card h3 {
+            color: #e74c3c;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .component-card ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .component-card li {
+            margin-bottom: 5px;
+        }
+        .flow-diagram {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .layer {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-bottom: 1px solid #ddd;
+        }
+        .layer:last-child {
+            border-bottom: none;
+        }
+        .layer-1 { top: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .layer-2 { top: 100px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .layer-3 { top: 200px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .layer-4 { top: 300px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .layer-5 { top: 400px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        .layer-6 { top: 500px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .layer-label {
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 150px;
+            text-align: center;
+        }
+        .layer-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+        .component-box {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #333;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .arrow-1 { top: 90px; }
+        .arrow-2 { top: 190px; }
+        .arrow-3 { top: 290px; }
+        .arrow-4 { top: 390px; }
+        .arrow-5 { top: 490px; }
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tech-item {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .tech-item strong {
+            color: #2c3e50;
+        }
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 High-Performance Multi-Tenant HR System Architecture</h1>
+        
+        <div class="architecture-section">
+            <h2 class="section-title">System Architecture Overview</h2>
+            
+            <div class="flow-diagram">
+                <div class="layer layer-1">
+                    <div class="layer-label">Client Layer</div>
+                    <div class="layer-components">
+                        <div class="component-box">Angular Web App</div>
+                        <div class="component-box">Mobile App</div>
+                        <div class="component-box">Admin Dashboard</div>
+                        <div class="component-box">Attendance Devices</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-1"></div>
+                
+                <div class="layer layer-2">
+                    <div class="layer-label">API Gateway</div>
+                    <div class="layer-components">
+                        <div class="component-box">Load Balancer</div>
+                        <div class="component-box">Rate Limiting</div>
+                        <div class="component-box">Authentication</div>
+                        <div class="component-box">Tenant Resolution</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-2"></div>
+                
+                <div class="layer layer-3">
+                    <div class="layer-label">Microservices</div>
+                    <div class="layer-components">
+                        <div class="component-box">User Service</div>
+                        <div class="component-box">Attendance Service</div>
+                        <div class="component-box">Payroll Service</div>
+                        <div class="component-box">AI Service</div>
+                        <div class="component-box">Notification Service</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-3"></div>
+                
+                <div class="layer layer-4">
+                    <div class="layer-label">Message Queue</div>
+                    <div class="layer-components">
+                        <div class="component-box">Apache Kafka</div>
+                        <div class="component-box">Redis Queue</div>
+                        <div class="component-box">Event Streaming</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-4"></div>
+                
+                <div class="layer layer-5">
+                    <div class="layer-label">Data Processing</div>
+                    <div class="layer-components">
+                        <div class="component-box">Apache Spark</div>
+                        <div class="component-box">Stream Processing</div>
+                        <div class="component-box">ML Pipeline</div>
+                        <div class="component-box">Data Warehouse</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-5"></div>
+                
+                <div class="layer layer-6">
+                    <div class="layer-label">Data Layer</div>
+                    <div class="layer-components">
+                        <div class="component-box">PostgreSQL</div>
+                        <div class="component-box">MongoDB</div>
+                        <div class="component-box">Redis Cache</div>
+                        <div class="component-box">Elasticsearch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Core Components</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🌐 API Gateway & Load Balancer</h3>
+                    <ul>
+                        <li>NGINX/HAProxy for load balancing</li>
+                        <li>Spring Cloud Gateway</li>
+                        <li>JWT-based authentication</li>
+                        <li>Rate limiting per tenant</li>
+                        <li>Request routing & monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>👥 User Management Service</h3>
+                    <ul>
+                        <li>Multi-tenant user authentication</li>
+                        <li>Role-based access control</li>
+                        <li>Employee profile management</li>
+                        <li>Organizational hierarchy</li>
+                        <li>Spring Security integration</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>⏰ Attendance Service</h3>
+                    <ul>
+                        <li>Real-time attendance processing</li>
+                        <li>Device integration (REST/MQTT)</li>
+                        <li>Bulk data ingestion</li>
+                        <li>Geofencing & validation</li>
+                        <li>Async processing with Kafka</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🤖 AI/ML Service</h3>
+                    <ul>
+                        <li>Attendance pattern analysis</li>
+                        <li>Fraud detection algorithms</li>
+                        <li>Predictive analytics</li>
+                        <li>Performance insights</li>
+                        <li>TensorFlow/PyTorch integration</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>💰 Payroll Service</h3>
+                    <ul>
+                        <li>Salary calculation engine</li>
+                        <li>Tax computation</li>
+                        <li>Benefits management</li>
+                        <li>Compliance reporting</li>
+                        <li>Integration with banking</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>📊 Analytics Service</h3>
+                    <ul>
+                        <li>Real-time dashboards</li>
+                        <li>Custom report generation</li>
+                        <li>KPI tracking</li>
+                        <li>Data visualization</li>
+                        <li>Export capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Technology Stack</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Backend Framework:</strong><br>
+                    Spring Boot 3.2+, Spring Security, Spring Data JPA, Spring Cloud
+                </div>
+                <div class="tech-item">
+                    <strong>Frontend:</strong><br>
+                    Angular 17+, NgRx, Angular Material, TypeScript
+                </div>
+                <div class="tech-item">
+                    <strong>Databases:</strong><br>
+                    PostgreSQL (Primary), MongoDB (Documents), Redis (Cache)
+                </div>
+                <div class="tech-item">
+                    <strong>Message Queue:</strong><br>
+                    Apache Kafka, Redis Pub/Sub, RabbitMQ
+                </div>
+                <div class="tech-item">
+                    <strong>Search Engine:</strong><br>
+                    Elasticsearch, Kibana for logging
+                </div>
+                <div class="tech-item">
+                    <strong>Big Data:</strong><br>
+                    Apache Spark, Apache Flink for stream processing
+                </div>
+                <div class="tech-item">
+                    <strong>AI/ML:</strong><br>
+                    TensorFlow, Scikit-learn, Python FastAPI
+                </div>
+                <div class="tech-item">
+                    <strong>Containerization:</strong><br>
+                    Docker, Kubernetes, Helm charts
+                </div>
+                <div class="tech-item">
+                    <strong>Monitoring:</strong><br>
+                    Prometheus, Grafana, ELK Stack
+                </div>
+                <div class="tech-item">
+                    <strong>Cloud Platform:</strong><br>
+                    AWS/Azure/GCP with auto-scaling
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Performance Targets</h2>
+            
+            <div class="performance-metrics">
+                <div class="metric-card">
+                    <div class="metric-number">1M+</div>
+                    <div class="metric-label">Concurrent Users</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">10K</div>
+                    <div class="metric-label">Requests/Second</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">100ms</div>
+                    <div class="metric-label">Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">99.9%</div>
+                    <div class="metric-label">Uptime SLA</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">1M</div>
+                    <div class="metric-label">Daily Attendance Records</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">50TB</div>
+                    <div class="metric-label">Data Storage Capacity</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Multi-Tenancy Strategy</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🗄️ Database Per Tenant</h3>
+                    <ul>
+                        <li>Complete data isolation</li>
+                        <li>Custom schema per tenant</li>
+                        <li>Independent scaling</li>
+                        <li>Compliance-friendly</li>
+                        <li>Higher resource usage</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🔑 Row-Level Security</h3>
+                    <ul>
+                        <li>Shared database with tenant_id</li>
+                        <li>PostgreSQL RLS policies</li>
+                        <li>Cost-effective scaling</li>
+                        <li>Complex query optimization</li>
+                        <li>Careful index management</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🔄 Hybrid Approach</h3>
+                    <ul>
+                        <li>Shared DB for small tenants</li>
+                        <li>Dedicated DB for large tenants</li>
+                        <li>Dynamic tenant migration</li>
+                        <li>Optimal resource utilization</li>
+                        <li>Flexible scaling strategy</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Attendance Data Processing Pipeline</h2>
+            
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Real-time Processing Flow</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Device Input</div>
+                        <div style="font-size: 12px;">Biometric/RFID</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Kafka Queue</div>
+                        <div style="font-size: 12px;">Event Streaming</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Validation</div>
+                        <div style="font-size: 12px;">Business Rules</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">AI Analysis</div>
+                        <div style="font-size: 12px;">Pattern Detection</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Storage</div>
+                        <div style="font-size: 12px;">Multi-DB Strategy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">AI Integration Features</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🔍 Anomaly Detection</h3>
+                    <ul>
+                        <li>Unusual check-in patterns</li>
+                        <li>Fraudulent attendance detection</li>
+                        <li>Location-based validation</li>
+                        <li>Time-series analysis</li>
+                        <li>Real-time alerts</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>📈 Predictive Analytics</h3>
+                    <ul>
+                        <li>Absenteeism prediction</li>
+                        <li>Turnover risk analysis</li>
+                        <li>Workload forecasting</li>
+                        <li>Performance trends</li>
+                        <li>Resource planning</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🧠 Intelligent Automation</h3>
+                    <ul>
+                        <li>Auto-schedule optimization</li>
+                        <li>Leave recommendation</li>
+                        <li>Payroll adjustments</li>
+                        <li>Compliance monitoring</li>
+                        <li>Smart reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Deployment Architecture</h2>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h3 style="color: #28a745; margin-top: 0;">Kubernetes Cluster Setup</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+                    <div>
+                        <strong>Production Environment:</strong>
+                        <ul>
+                            <li>3 Master nodes (HA)</li>
+                            <li>10+ Worker nodes</li>
+                            <li>Auto-scaling enabled</li>
+                            <li>Resource quotas per tenant</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Database Cluster:</strong>
+                        <ul>
+                            <li>PostgreSQL cluster (Master-Slave)</li>
+                            <li>MongoDB replica set</li>
+                            <li>Redis cluster</li>
+                            <li>Automated backups</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Monitoring Stack:</strong>
+                        <ul>
+                            <li>Prometheus + Grafana</li>
+                            <li>ELK Stack for logs</li>
+                            <li>Jaeger for tracing</li>
+                            <li>AlertManager</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Security & Compliance</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Authentication:</strong><br>
+                    OAuth 2.0, JWT tokens, Multi-factor authentication
+                </div>
+                <div class="tech-item">
+                    <strong>Authorization:</strong><br>
+                    RBAC, ABAC, Spring Security, Method-level security
+                </div>
+                <div class="tech-item">
+                    <strong>Data Protection:</strong><br>
+                    AES-256 encryption, TLS 1.3, GDPR compliance
+                </div>
+                <div class="tech-item">
+                    <strong>API Security:</strong><br>
+                    Rate limiting, CORS, API key management
+                </div>
+                <div class="tech-item">
+                    <strong>Audit Logging:</strong><br>
+                    Complete audit trail, Immutable logs, Compliance reporting
+                </div>
+                <div class="tech-item">
+                    <strong>Infrastructure:</strong><br>
+                    WAF, DDoS protection, VPN access, Network segmentation
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR System Architecture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mxgraph/4.2.2/js/mxClient.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .architecture-section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            color: #34495e;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .component-card {
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .component-card h3 {
+            color: #e74c3c;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .component-card ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .component-card li {
+            margin-bottom: 5px;
+        }
+        .flow-diagram {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .layer {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-bottom: 1px solid #ddd;
+        }
+        .layer:last-child {
+            border-bottom: none;
+        }
+        .layer-1 { top: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .layer-2 { top: 100px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .layer-3 { top: 200px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .layer-4 { top: 300px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .layer-5 { top: 400px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        .layer-6 { top: 500px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .layer-label {
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 150px;
+            text-align: center;
+        }
+        .layer-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+        .component-box {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #333;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .arrow-1 { top: 90px; }
+        .arrow-2 { top: 190px; }
+        .arrow-3 { top: 290px; }
+        .arrow-4 { top: 390px; }
+        .arrow-5 { top: 490px; }
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tech-item {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .tech-item strong {
+            color: #2c3e50;
+        }
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 High-Performance Multi-Tenant HR System Architecture</h1>
+        
+        <div class="architecture-section">
+            <h2 class="section-title">System Architecture Overview</h2>
+            
+            <div class="flow-diagram">
+                <div class="layer layer-1">
+                    <div class="layer-label">Client Layer</div>
+                    <div class="layer-components">
+                        <div class="component-box">Angular Web App</div>
+                        <div class="component-box">Mobile App</div>
+                        <div class="component-box">Admin Dashboard</div>
+                        <div class="component-box">Attendance Devices</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-1"></div>
+                
+                <div class="layer layer-2">
+                    <div class="layer-label">API Gateway</div>
+                    <div class="layer-components">
+                        <div class="component-box">Load Balancer</div>
+                        <div class="component-box">Rate Limiting</div>
+                        <div class="component-box">Authentication</div>
+                        <div class="component-box">Tenant Resolution</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-2"></div>
+                
+                <div class="layer layer-3">
+                    <div class="layer-label">Microservices</div>
+                    <div class="layer-components">
+                        <div class="component-box">User Service</div>
+                        <div class="component-box">Attendance Service</div>
+                        <div class="component-box">Payroll Service</div>
+                        <div class="component-box">AI Service</div>
+                        <div class="component-box">Notification Service</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-3"></div>
+                
+                <div class="layer layer-4">
+                    <div class="layer-label">Message Queue</div>
+                    <div class="layer-components">
+                        <div class="component-box">Apache Kafka</div>
+                        <div class="component-box">Redis Queue</div>
+                        <div class="component-box">Event Streaming</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-4"></div>
+                
+                <div class="layer layer-5">
+                    <div class="layer-label">Data Processing</div>
+                    <div class="layer-components">
+                        <div class="component-box">Apache Spark</div>
+                        <div class="component-box">Stream Processing</div>
+                        <div class="component-box">ML Pipeline</div>
+                        <div class="component-box">Data Warehouse</div>
+                    </div>
+                </div>
+                <div class="arrow arrow-5"></div>
+                
+                <div class="layer layer-6">
+                    <div class="layer-label">Data Layer</div>
+                    <div class="layer-components">
+                        <div class="component-box">PostgreSQL</div>
+                        <div class="component-box">MongoDB</div>
+                        <div class="component-box">Redis Cache</div>
+                        <div class="component-box">Elasticsearch</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Core Components</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🌐 API Gateway & Load Balancer</h3>
+                    <ul>
+                        <li>NGINX/HAProxy for load balancing</li>
+                        <li>Spring Cloud Gateway</li>
+                        <li>JWT-based authentication</li>
+                        <li>Rate limiting per tenant</li>
+                        <li>Request routing & monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>👥 User Management Service</h3>
+                    <ul>
+                        <li>Multi-tenant user authentication</li>
+                        <li>Role-based access control</li>
+                        <li>Employee profile management</li>
+                        <li>Organizational hierarchy</li>
+                        <li>Spring Security integration</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>⏰ Attendance Service</h3>
+                    <ul>
+                        <li>Real-time attendance processing</li>
+                        <li>Device integration (REST/MQTT)</li>
+                        <li>Bulk data ingestion</li>
+                        <li>Geofencing & validation</li>
+                        <li>Async processing with Kafka</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🤖 AI/ML Service</h3>
+                    <ul>
+                        <li>Attendance pattern analysis</li>
+                        <li>Fraud detection algorithms</li>
+                        <li>Predictive analytics</li>
+                        <li>Performance insights</li>
+                        <li>TensorFlow/PyTorch integration</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>💰 Payroll Service</h3>
+                    <ul>
+                        <li>Salary calculation engine</li>
+                        <li>Tax computation</li>
+                        <li>Benefits management</li>
+                        <li>Compliance reporting</li>
+                        <li>Integration with banking</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>📊 Analytics Service</h3>
+                    <ul>
+                        <li>Real-time dashboards</li>
+                        <li>Custom report generation</li>
+                        <li>KPI tracking</li>
+                        <li>Data visualization</li>
+                        <li>Export capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Technology Stack</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Backend Framework:</strong><br>
+                    Spring Boot 3.2+, Spring Security, Spring Data JPA, Spring Cloud
+                </div>
+                <div class="tech-item">
+                    <strong>Frontend:</strong><br>
+                    Angular 17+, NgRx, Angular Material, TypeScript
+                </div>
+                <div class="tech-item">
+                    <strong>Databases:</strong><br>
+                    PostgreSQL (Primary), MongoDB (Documents), Redis (Cache)
+                </div>
+                <div class="tech-item">
+                    <strong>Message Queue:</strong><br>
+                    Apache Kafka, Redis Pub/Sub, RabbitMQ
+                </div>
+                <div class="tech-item">
+                    <strong>Search Engine:</strong><br>
+                    Elasticsearch, Kibana for logging
+                </div>
+                <div class="tech-item">
+                    <strong>Big Data:</strong><br>
+                    Apache Spark, Apache Flink for stream processing
+                </div>
+                <div class="tech-item">
+                    <strong>AI/ML:</strong><br>
+                    TensorFlow, Scikit-learn, Python FastAPI
+                </div>
+                <div class="tech-item">
+                    <strong>Containerization:</strong><br>
+                    Docker, Kubernetes, Helm charts
+                </div>
+                <div class="tech-item">
+                    <strong>Monitoring:</strong><br>
+                    Prometheus, Grafana, ELK Stack
+                </div>
+                <div class="tech-item">
+                    <strong>Cloud Platform:</strong><br>
+                    AWS/Azure/GCP with auto-scaling
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Performance Targets</h2>
+            
+            <div class="performance-metrics">
+                <div class="metric-card">
+                    <div class="metric-number">1M+</div>
+                    <div class="metric-label">Concurrent Users</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">10K</div>
+                    <div class="metric-label">Requests/Second</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">100ms</div>
+                    <div class="metric-label">Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">99.9%</div>
+                    <div class="metric-label">Uptime SLA</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">1M</div>
+                    <div class="metric-label">Daily Attendance Records</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">50TB</div>
+                    <div class="metric-label">Data Storage Capacity</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Multi-Tenancy Strategy</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🗄️ Database Per Tenant</h3>
+                    <ul>
+                        <li>Complete data isolation</li>
+                        <li>Custom schema per tenant</li>
+                        <li>Independent scaling</li>
+                        <li>Compliance-friendly</li>
+                        <li>Higher resource usage</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🔑 Row-Level Security</h3>
+                    <ul>
+                        <li>Shared database with tenant_id</li>
+                        <li>PostgreSQL RLS policies</li>
+                        <li>Cost-effective scaling</li>
+                        <li>Complex query optimization</li>
+                        <li>Careful index management</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🔄 Hybrid Approach</h3>
+                    <ul>
+                        <li>Shared DB for small tenants</li>
+                        <li>Dedicated DB for large tenants</li>
+                        <li>Dynamic tenant migration</li>
+                        <li>Optimal resource utilization</li>
+                        <li>Flexible scaling strategy</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Attendance Data Processing Pipeline</h2>
+            
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Real-time Processing Flow</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Device Input</div>
+                        <div style="font-size: 12px;">Biometric/RFID</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Kafka Queue</div>
+                        <div style="font-size: 12px;">Event Streaming</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Validation</div>
+                        <div style="font-size: 12px;">Business Rules</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">AI Analysis</div>
+                        <div style="font-size: 12px;">Pattern Detection</div>
+                    </div>
+                    <div style="font-size: 20px;">→</div>
+                    <div style="text-align: center; flex: 1; min-width: 120px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-bottom: 5px;">Storage</div>
+                        <div style="font-size: 12px;">Multi-DB Strategy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">AI Integration Features</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🔍 Anomaly Detection</h3>
+                    <ul>
+                        <li>Unusual check-in patterns</li>
+                        <li>Fraudulent attendance detection</li>
+                        <li>Location-based validation</li>
+                        <li>Time-series analysis</li>
+                        <li>Real-time alerts</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>📈 Predictive Analytics</h3>
+                    <ul>
+                        <li>Absenteeism prediction</li>
+                        <li>Turnover risk analysis</li>
+                        <li>Workload forecasting</li>
+                        <li>Performance trends</li>
+                        <li>Resource planning</li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🧠 Intelligent Automation</h3>
+                    <ul>
+                        <li>Auto-schedule optimization</li>
+                        <li>Leave recommendation</li>
+                        <li>Payroll adjustments</li>
+                        <li>Compliance monitoring</li>
+                        <li>Smart reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Deployment Architecture</h2>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
+                <h3 style="color: #28a745; margin-top: 0;">Kubernetes Cluster Setup</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+                    <div>
+                        <strong>Production Environment:</strong>
+                        <ul>
+                            <li>3 Master nodes (HA)</li>
+                            <li>10+ Worker nodes</li>
+                            <li>Auto-scaling enabled</li>
+                            <li>Resource quotas per tenant</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Database Cluster:</strong>
+                        <ul>
+                            <li>PostgreSQL cluster (Master-Slave)</li>
+                            <li>MongoDB replica set</li>
+                            <li>Redis cluster</li>
+                            <li>Automated backups</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Monitoring Stack:</strong>
+                        <ul>
+                            <li>Prometheus + Grafana</li>
+                            <li>ELK Stack for logs</li>
+                            <li>Jaeger for tracing</li>
+                            <li>AlertManager</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="architecture-section">
+            <h2 class="section-title">Security & Compliance</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Authentication:</strong><br>
+                    OAuth 2.0, JWT tokens, Multi-factor authentication
+                </div>
+                <div class="tech-item">
+                    <strong>Authorization:</strong><br>
+                    RBAC, ABAC, Spring Security, Method-level security
+                </div>
+                <div class="tech-item">
+                    <strong>Data Protection:</strong><br>
+                    AES-256 encryption, TLS 1.3, GDPR compliance
+                </div>
+                <div class="tech-item">
+                    <strong>API Security:</strong><br>
+                    Rate limiting, CORS, API key management
+                </div>
+                <div class="tech-item">
+                    <strong>Audit Logging:</strong><br>
+                    Complete audit trail, Immutable logs, Compliance reporting
+                </div>
+                <div class="tech-item">
+                    <strong>Infrastructure:</strong><br>
+                    WAF, DDoS protection, VPN access, Network segmentation
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
