@@ -4,16 +4,14 @@ import com.hrsystem.employee.enums.DepartmentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "departments")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Department extends BaseEntity{
 
