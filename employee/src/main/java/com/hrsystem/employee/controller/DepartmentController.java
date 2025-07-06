@@ -46,6 +46,24 @@ public class DepartmentController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<DepartmentDTO>> getDepartmentById(@PathVariable String id) {
+        DepartmentDTO department = service.findById(UUID.fromString(id));
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Success", department));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<UUID>> update(@PathVariable UUID id, @Valid @RequestBody DepartmentDTO updateDTO) {
+        DepartmentDTO updated = service.update(id, updateDTO);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Success", updated.getId()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Boolean>> delete(@PathVariable UUID id) {
+        boolean deleted = service.delete(id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.NO_CONTENT.value(), "Success", deleted));
+    }
+
 
 
 

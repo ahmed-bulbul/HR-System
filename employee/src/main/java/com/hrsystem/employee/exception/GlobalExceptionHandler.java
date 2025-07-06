@@ -68,4 +68,10 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "ValidationFailed", "Validation failed: " + errors.toString()));
     }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDataNotFound(DataNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "DataNotFound", ex.getMessage()));
+    }
 }

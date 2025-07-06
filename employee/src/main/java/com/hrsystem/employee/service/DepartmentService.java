@@ -3,6 +3,7 @@ package com.hrsystem.employee.service;
 import com.hrsystem.employee.audit.Auditable;
 import com.hrsystem.employee.dto.DepartmentCreateDto;
 import com.hrsystem.employee.dto.DepartmentDTO;
+import com.hrsystem.employee.exception.DataNotFoundException;
 import com.hrsystem.employee.mapper.DepartmentMapper;
 import com.hrsystem.employee.model.Department;
 import com.hrsystem.employee.repository.DepartmentRepository;
@@ -10,6 +11,7 @@ import com.hrsystem.employee.response.PageResponse;
 import com.hrsystem.employee.util.AuditLoggerUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,17 +35,22 @@ public class DepartmentService {
         return DepartmentMapper.TO_DTO.apply(department);
     }
 
-    public Optional<DepartmentDTO> findById(UUID id) {
-        return repository.findById(id).map(DepartmentMapper.TO_DTO);
+    public DepartmentDTO findById(UUID id) {
+        return repository.findById(id).map(DepartmentMapper.TO_DTO)
+                .orElseThrow(() -> new DataNotFoundException("Department not found"));
     }
 
     @Auditable(entity = "Department", action = "UPDATE", description = "Updated a department")
-    public Optional<DepartmentDTO> update(UUID id, DepartmentDTO updateDTO) {
-        return repository.findById(id)
-                .map(department -> DepartmentMapper.UPDATE_ENTITY.apply(department, updateDTO))
-                .map(repository::save)
-                .map(DepartmentMapper.TO_DTO);
+    public DepartmentDTO update(UUID id, DepartmentDTO updateDTO) {
+        Department department = repository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Department not found"));
+
+        Department updated = DepartmentMapper.UPDATE_ENTITY.apply(department, updateDTO);
+        Department saved = repository.save(updated);
+
+        return DepartmentMapper.TO_DTO.apply(saved);
     }
+
 
     @Auditable(entity = "Department", action = "DELETE", description = "Deleted a department")
     public boolean delete(UUID id) {
