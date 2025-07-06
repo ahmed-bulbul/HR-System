@@ -1,5 +1,8 @@
 package com.hrsystem.employee.context;
 
+import org.springframework.stereotype.Component;
+
+
 public class TenantContext {
     private static final ThreadLocal<String> currentTenant = new ThreadLocal<>();
 

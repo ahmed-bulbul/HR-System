@@ -19,7 +19,7 @@ public class TestController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/getUsers")
+    @GetMapping
     public List<TestUser> getUsers() {
         String sql = "SELECT id, first_name, last_name, email, role, created_at FROM test_user";
 

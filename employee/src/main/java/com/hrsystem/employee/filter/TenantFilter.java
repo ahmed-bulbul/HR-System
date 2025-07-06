@@ -15,8 +15,8 @@ import java.io.IOException;
 @Component
 public class TenantFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain chain)
             throws ServletException, IOException {
 
         String tenantId = request.getHeader("X-Tenant-ID");

@@ -31,16 +31,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ApiResponse<Object>> handleDataAccess(DataAccessException ex) {
-        String errorMessage = "A database error occurred.";
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "DatabaseError", errorMessage));
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "DatabaseError", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleOtherExceptions(Exception ex) {
-        String errorMessage = "Unexpected server error.";
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "InternalServerError", errorMessage));
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "InternalServerError", ex.getMessage()));
     }
 
     private String extractSqlFromMessage(String msg) {

@@ -23,3 +23,16 @@ FROM (
 WHERE NOT EXISTS (
     SELECT 1 FROM public.tenant_metadata tm WHERE tm.tenant_id = t.tenant_id
 );
+
+
+-- V1__create_audit_log_table.sql
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id SERIAL PRIMARY KEY,
+    entity_name VARCHAR(255),
+    entity_id VARCHAR(255),
+    tenant_id VARCHAR(100),
+    action VARCHAR(50),
+    description TEXT,
+    timestamp TIMESTAMP,
+    performed_by VARCHAR(255)
+);
