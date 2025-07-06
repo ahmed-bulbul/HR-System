@@ -4,6 +4,7 @@ package com.hrsystem.employee.controller;
 import com.hrsystem.employee.dto.DepartmentCreateDto;
 import com.hrsystem.employee.dto.DepartmentDTO;
 import com.hrsystem.employee.response.ApiResponse;
+import com.hrsystem.employee.response.PageResponse;
 import com.hrsystem.employee.service.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +33,19 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<DepartmentDTO>>> getAllDepartments(
+    public ResponseEntity<ApiResponse<PageResponse<DepartmentDTO>>> getAllDepartments(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "search", required = false) String search) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<DepartmentDTO> departments = service.findAll(pageable);
+        PageResponse<DepartmentDTO> departments = service.findAll(search, pageable);
 
         return ResponseEntity.ok(
                 ApiResponse.success(HttpStatus.OK.value(), "Success", departments)
         );
     }
+
 
 
 

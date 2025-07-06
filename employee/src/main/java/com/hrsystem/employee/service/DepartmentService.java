@@ -6,6 +6,7 @@ import com.hrsystem.employee.dto.DepartmentDTO;
 import com.hrsystem.employee.mapper.DepartmentMapper;
 import com.hrsystem.employee.model.Department;
 import com.hrsystem.employee.repository.DepartmentRepository;
+import com.hrsystem.employee.response.PageResponse;
 import com.hrsystem.employee.util.AuditLoggerUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,7 +55,29 @@ public class DepartmentService {
                 .orElse(false);
     }
 
-    public Page<DepartmentDTO> findAll(Pageable pageable) {
-        return repository.findAll(pageable).map(DepartmentMapper.TO_DTO);
+    public PageResponse<DepartmentDTO> findAll(String search,Pageable pageable) {
+
+        Page<Department> departments;
+
+        if (search == null || search.isBlank()) {
+            departments = repository.findAll(pageable);
+        } else {
+            departments = repository.searchByMultipleFields(search, pageable);
+        }
+
+        List<DepartmentDTO> data = departments.getContent()
+                .stream()
+                .map(DepartmentMapper.TO_DTO)
+                .toList();
+
+        return new PageResponse<>(
+                data,
+                pageable.getPageNumber(),    // pageNumber
+                pageable.getPageSize(),      // pageSize
+                departments.getTotalElements(),  // totalElements
+                departments.getTotalPages()       // totalPages
+        );
+
     }
+
 }
