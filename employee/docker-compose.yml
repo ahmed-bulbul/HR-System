@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hr_employee_service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/hr_system
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - "8080:8080"
+    networks:
+      - hrnet
+
+  k6:
+    image: grafana/k6
+    container_name: hr_k6_tester
+    depends_on:
+      - influxdb
+      - springboot-app
+    volumes:
+      - ./k6-scripts:/scripts
+    entrypoint:
+      - k6
+      - run
+      - /scripts/load-test.js
+    environment:
+      - K6_OUT=influxdb=http://hr_influxdb:8086/k6
+    networks:
+      - hrnet
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: hr_influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=k6
+    volumes:
+      - influxdb-storage:/var/lib/influxdb
+    networks:
+      - hrnet
+
+  grafana:
+    image: grafana/grafana
+    container_name: hr_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - hrnet
+
+networks:
+  hrnet:
+    driver: bridge
+
+volumes:
+  influxdb-storage:
+  grafana-storage:
