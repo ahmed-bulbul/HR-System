@@ -1,4 +1,4 @@
-package com.hrsystem.employee.config;
+package com.hrsystem.employee.config.flyway;
 
 import jakarta.annotation.PostConstruct;
 import org.flywaydb.core.Flyway;
@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class FlywayMigrationConfig {
+public class FlywayMigrationService {
 
     private final DataSource dataSource;
 
-    public FlywayMigrationConfig(DataSource dataSource) {
+    public FlywayMigrationService(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

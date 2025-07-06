@@ -1,4 +1,4 @@
-package com.hrsystem.employee.config;
+package com.hrsystem.employee.config.flyway;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-public class FlywayMigrationConfigTest {
+public class FlywayMigrationServiceTest {
 
     private DataSource mockDataSource;
     private Connection mockConnection;
@@ -24,7 +24,7 @@ public class FlywayMigrationConfigTest {
     private PreparedStatement mockPreparedStatement;
     private ResultSet mockResultSet;
 
-    private FlywayMigrationConfig migrationConfig;
+    private FlywayMigrationService migrationConfig;
 
     @BeforeEach
     public void setup() throws Exception {
@@ -37,7 +37,7 @@ public class FlywayMigrationConfigTest {
         when(mockDataSource.getConnection()).thenReturn(mockConnection);
         when(mockConnection.createStatement()).thenReturn(mockStatement);
 
-        migrationConfig = new FlywayMigrationConfig(mockDataSource);
+        migrationConfig = new FlywayMigrationService(mockDataSource);
     }
 
     @Test

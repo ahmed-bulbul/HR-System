@@ -1,5 +1,6 @@
 package com.hrsystem.employee.config;
 
+import com.hrsystem.employee.config.datasource.SchemaAwareDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

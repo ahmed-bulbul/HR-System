@@ -21,7 +21,7 @@ public class TestController {
 
     @GetMapping("/getUsers")
     public List<TestUser> getUsers() {
-        String sql = "SELECT id, first_name, last_name, email, role, created_at FROM employee";
+        String sql = "SELECT id, first_name, last_name, email, role, created_at FROM test_user";
 
         return jdbcTemplate.query(sql, new RowMapper<TestUser>() {
             @Override

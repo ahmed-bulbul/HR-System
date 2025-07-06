@@ -1,7 +1,8 @@
-package com.hrsystem.employee.config;
+package com.hrsystem.employee.config.datasource;
 
-import com.hrsystem.employee.contexts.TenantContext;
+import com.hrsystem.employee.context.TenantContext;
 import org.springframework.jdbc.datasource.DelegatingDataSource;
+import org.springframework.lang.NonNull;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ public class SchemaAwareDataSource extends DelegatingDataSource {
     }
 
     @Override
+    @NonNull
     public Connection getConnection() throws SQLException {
         Connection conn = super.getConnection();
         String schema = TenantContext.getTenantId();
