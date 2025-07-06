@@ -1,59 +1,73 @@
 package com.hrsystem.employee.exception;
 
+import com.hrsystem.employee.response.ApiResponse;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadSqlGrammarException.class)
-    public ResponseEntity<ApiError> handleBadSqlGrammar(BadSqlGrammarException ex) {
+    public ResponseEntity<ApiResponse<Object>> handleBadSqlGrammar(BadSqlGrammarException ex) {
         String message = ex.getMessage();
         String sql = extractSqlFromMessage(message);
 
-        ApiError error = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "TableNotFound",
-                "Table or relation does not exist in the current tenant schema.Please pass a valid tenantId on the request header. ",
-                sql
-        );
+        String errorMessage = "Table or relation does not exist in the current tenant schema. Please pass a valid tenantId in the request header.";
+        String fullMessage = String.format("%s | SQL: %s", errorMessage, sql);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "TableNotFound", fullMessage));
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ApiError> handleDataAccess(DataAccessException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "DatabaseError",
-                "A database error occurred.",
-                ex.getMostSpecificCause().getMessage()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    public ResponseEntity<ApiResponse<Object>> handleDataAccess(DataAccessException ex) {
+        String errorMessage = "A database error occurred.";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "DatabaseError", errorMessage));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleOtherExceptions(Exception ex) {
-        ApiError error = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "InternalServerError",
-                "Unexpected server error.",
-                ex.getMessage()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    public ResponseEntity<ApiResponse<Object>> handleOtherExceptions(Exception ex) {
+        String errorMessage = "Unexpected server error.";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "InternalServerError", errorMessage));
     }
 
     private String extractSqlFromMessage(String msg) {
-        // Optional: try to extract SQL from the message
         int start = msg.indexOf('[');
         int end = msg.lastIndexOf(']');
         if (start >= 0 && end > start) {
             return msg.substring(start + 1, end);
         }
         return "Unknown SQL statement";
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        fe -> fe.getDefaultMessage() == null ? "Invalid" : fe.getDefaultMessage(),
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new
+                ));
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "ValidationFailed", "Validation failed: " + errors.toString()));
     }
 }
