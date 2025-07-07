@@ -74,36 +74,6 @@ class DepartmentControllerTest {
         }
     }
 
-
-
-
-//    @Test
-//    @Order(1)
-//    void createAndFetchDepartment() throws Exception {
-//        DepartmentCreateDto createDto = DepartmentCreateDto.builder()
-//                .departmentName("HR")
-//                .description("Human Resources")
-//                .status(DepartmentStatus.ACTIVE)
-//                .departmentCode("HR001")
-//                .build();
-//
-//        String response = mockMvc.perform(post(BASE_URL)
-//                        .header("X-Tenant-ID", TENANT_SCHEMA)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDto)))
-//                .andExpect(status().isCreated())
-//                .andReturn().getResponse().getContentAsString();
-//
-//        long id = objectMapper.readTree(response).get("data").asLong();
-//        System.out.println("ID created: " + id);
-//
-//        mockMvc.perform(get(BASE_URL + "/" + id)
-//                        .header("X-Tenant-ID", TENANT_SCHEMA))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.data.departmentName").value("HR"));
-//    }
-
-
     @Test
     @Order(1)
     void shouldCreateDepartmentSuccessfully() throws Exception {
