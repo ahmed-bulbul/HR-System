@@ -28,20 +28,20 @@ public class DepartmentService {
     private final DepartmentRepository repository;
     private final AuditLoggerUtil auditLoggerUtil;
 
-    @Auditable(entity = "Department", action = "CREATE", description = "Created a new department")
+   // @Auditable(entity = "Department", action = "CREATE", description = "Created a new department")
     public DepartmentDTO create(DepartmentCreateDto createDTO) {
         Department department = DepartmentMapper.TO_ENTITY.apply(createDTO);
         department = repository.save(department);
         return DepartmentMapper.TO_DTO.apply(department);
     }
 
-    public DepartmentDTO findById(UUID id) {
+    public DepartmentDTO findById(Long id) {
         return repository.findById(id).map(DepartmentMapper.TO_DTO)
                 .orElseThrow(() -> new DataNotFoundException("Department not found"));
     }
 
     @Auditable(entity = "Department", action = "UPDATE", description = "Updated a department")
-    public DepartmentDTO update(UUID id, DepartmentDTO updateDTO) {
+    public DepartmentDTO update(Long id, DepartmentDTO updateDTO) {
         Department department = repository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Department not found"));
 
@@ -53,13 +53,13 @@ public class DepartmentService {
 
 
     @Auditable(entity = "Department", action = "DELETE", description = "Deleted a department")
-    public boolean delete(UUID id) {
+    public boolean delete(Long id) {
         return repository.findById(id)
                 .map(department -> {
                     repository.delete(department);
                     return true;
                 })
-                .orElse(false);
+                .orElseThrow(() -> new DataNotFoundException("Department not found"));
     }
 
     public PageResponse<DepartmentDTO> findAll(String search,Pageable pageable) {

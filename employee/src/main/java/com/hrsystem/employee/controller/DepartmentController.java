@@ -8,7 +8,6 @@ import com.hrsystem.employee.response.PageResponse;
 import com.hrsystem.employee.service.DepartmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class DepartmentController {
     private final DepartmentService service;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UUID>> create(@Valid @RequestBody DepartmentCreateDto createDTO) {
+    public ResponseEntity<ApiResponse<Long>> create( @RequestBody DepartmentCreateDto createDTO) {
         DepartmentDTO created = service.create(createDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(HttpStatus.CREATED.value(), "Created", created.getId()));
@@ -47,19 +46,19 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DepartmentDTO>> getDepartmentById(@PathVariable String id) {
-        DepartmentDTO department = service.findById(UUID.fromString(id));
+    public ResponseEntity<ApiResponse<DepartmentDTO>> getDepartmentById(@PathVariable Long id) {
+        DepartmentDTO department = service.findById(id);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Success", department));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UUID>> update(@PathVariable UUID id, @Valid @RequestBody DepartmentDTO updateDTO) {
+    public ResponseEntity<ApiResponse<Long>> update(@PathVariable Long id, @Valid @RequestBody DepartmentDTO updateDTO) {
         DepartmentDTO updated = service.update(id, updateDTO);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Success", updated.getId()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Boolean>> delete(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Boolean>> delete(@PathVariable Long id) {
         boolean deleted = service.delete(id);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.NO_CONTENT.value(), "Success", deleted));
     }

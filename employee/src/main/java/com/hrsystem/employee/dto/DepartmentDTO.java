@@ -1,7 +1,6 @@
 package com.hrsystem.employee.dto;
 
 import com.hrsystem.employee.enums.DepartmentStatus;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

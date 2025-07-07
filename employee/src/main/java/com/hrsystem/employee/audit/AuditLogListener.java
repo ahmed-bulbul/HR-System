@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class AuditLogListener {
@@ -15,8 +17,8 @@ public class AuditLogListener {
     public void onAuditEvent(AuditLogEvent event) {
         AuditLog log = AuditLog.builder()
                 .entityName(event.getEntityName())
-                .entityId(event.getEntityId())
-                .tenantId(event.getTenantId())
+                .entityId(UUID.fromString(event.getEntityId()))
+                .tenantId(UUID.fromString(event.getTenantId()))
                 .action(event.getAction())
                 .description(event.getDescription())
                 .performedBy(event.getPerformedBy())

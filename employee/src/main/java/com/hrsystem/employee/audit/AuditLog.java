@@ -4,6 +4,7 @@ package com.hrsystem.employee.audit;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "audit_logs")
@@ -18,9 +19,9 @@ public class AuditLog {
     private Long id;
 
     private String entityName;
-    private String entityId;
+    private UUID entityId;
     private String action; // CREATE, UPDATE, DELETE
-    private String tenantId;
+    private UUID tenantId;
 
     @Column(length = 1000)
     private String description;

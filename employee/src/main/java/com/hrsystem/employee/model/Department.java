@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "departments")
@@ -27,7 +29,5 @@ public class Department extends BaseEntity{
     @Column(name = "status", nullable = false)
     private DepartmentStatus status;
 
-    @Column(name = "tenant_id")
-    private String tenantId;
 
 }

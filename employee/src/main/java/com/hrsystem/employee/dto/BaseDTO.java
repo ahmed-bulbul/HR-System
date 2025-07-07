@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Data
 public class BaseDTO {
-    private UUID id;
+    private Long id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long version;

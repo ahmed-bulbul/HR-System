@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -21,7 +22,6 @@ public class DepartmentMapper {
                 .departmentName(department.getDepartmentName())
                 .description(department.getDescription())
                 .status(department.getStatus())
-                .tenantId(department.getTenantId())
                 .departmentCode(department.getDepartmentCode())
                 .build();
 
@@ -34,7 +34,6 @@ public class DepartmentMapper {
             .departmentName(dto.getDepartmentName())
             .description(dto.getDescription())
             .status(dto.getStatus())
-            .tenantId(dto.getTenantId())
             .departmentCode(dto.getDepartmentCode())
             .build();
 
@@ -44,7 +43,6 @@ public class DepartmentMapper {
         department.setDepartmentName(dto.getDepartmentName());
         department.setDescription(dto.getDescription());
         department.setStatus(dto.getStatus());
-        department.setTenantId(dto.getTenantId());
         department.setDepartmentCode(dto.getDepartmentCode());
         return department;
     };

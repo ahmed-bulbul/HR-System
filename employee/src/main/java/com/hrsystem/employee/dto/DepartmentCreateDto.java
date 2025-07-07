@@ -11,7 +11,6 @@ public class DepartmentCreateDto {
     private String departmentName;
     private String description;
     private DepartmentStatus status;
-    private String tenantId;
     @NotBlank(message = "Department code is required")
     private String departmentCode;
 }

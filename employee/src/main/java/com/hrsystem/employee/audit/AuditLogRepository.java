@@ -3,4 +3,6 @@ package com.hrsystem.employee.audit;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {}
+import java.util.UUID;
+
+public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {}
