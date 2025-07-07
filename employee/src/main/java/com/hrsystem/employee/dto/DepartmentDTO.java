@@ -1,13 +1,17 @@
 package com.hrsystem.employee.dto;
 
 import com.hrsystem.employee.enums.DepartmentStatus;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepartmentDTO extends BaseDTO {
 
     private String departmentName;

@@ -121,6 +121,7 @@ class DepartmentControllerTest {
     @Order(4)
     void shouldUpdateDepartmentSuccessfully() throws Exception {
         DepartmentDTO updateDto = DepartmentDTO.builder()
+                .id(createdDepartmentId)
                 .departmentName("HR Updated")
                 .description("Updated Description")
                 .status(DepartmentStatus.INACTIVE)
