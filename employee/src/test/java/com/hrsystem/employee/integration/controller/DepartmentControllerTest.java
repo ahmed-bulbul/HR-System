@@ -1,4 +1,4 @@
-package com.hrsystem.employee.controller;
+package com.hrsystem.employee.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrsystem.employee.dto.DepartmentCreateDto;
