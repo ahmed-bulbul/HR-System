@@ -19,9 +19,9 @@ public class AuditLog {
     private Long id;
 
     private String entityName;
-    private UUID entityId;
+    private Long entityId;
     private String action; // CREATE, UPDATE, DELETE
-    private UUID tenantId;
+    private Long tenantId;
 
     @Column(length = 1000)
     private String description;

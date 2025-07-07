@@ -30,13 +30,13 @@ public class AuditLoggingAspect {
         String description = auditable.description();
 
         // Example: get entity id or name from the returned DTO or method arguments
-        String entityId = "N/A";
+        Long entityId = 0L;
 
         if (result != null) {
             try {
                 // Assuming returned object has a getId() method or getEntityName() method
                 Object id = result.getClass().getMethod("getId").invoke(result);
-                if (id != null) entityId = id.toString();
+                if (id != null) entityId = (Long) id;
             } catch (Exception e) {
                 // fallback or ignore
             }

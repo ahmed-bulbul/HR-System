@@ -28,7 +28,7 @@ public class DepartmentService {
     private final DepartmentRepository repository;
     private final AuditLoggerUtil auditLoggerUtil;
 
-   // @Auditable(entity = "Department", action = "CREATE", description = "Created a new department")
+    @Auditable(entity = "Department", action = "CREATE", description = "Created a new department")
     public DepartmentDTO create(DepartmentCreateDto createDTO) {
         Department department = DepartmentMapper.TO_ENTITY.apply(createDTO);
         department = repository.save(department);

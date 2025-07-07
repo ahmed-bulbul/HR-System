@@ -14,10 +14,10 @@ public class AuditLoggerUtil {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public void log(String entityName, Object entityId, String action, String description) {
+    public void log(String entityName, Long entityId, String action, String description) {
         AuditLogEvent event = AuditLogEvent.builder()
                 .entityName(entityName)
-                .entityId(entityId.toString())
+                .entityId(entityId)
                 .tenantId(getTenantId())
                 .action(action)
                 .description(description)
@@ -34,12 +34,18 @@ public class AuditLoggerUtil {
 
     }
 
-    private String getTenantId() {
-        //get tenant id from context
-        String tenantId = TenantContext.getTenantId();
-        if (tenantId == null) {
-            return "0";
+    public static Long getTenantId() {
+        // Get tenant ID from context
+        String tenantIdStr = TenantContext.getTenantId();
+        if (tenantIdStr == null) {
+            return 0L;
         }
-        return tenantId;
+        try {
+            return Long.valueOf(tenantIdStr);
+        } catch (NumberFormatException e) {
+            // Handle invalid tenant ID format
+            return 0L;
+        }
     }
+
 }
