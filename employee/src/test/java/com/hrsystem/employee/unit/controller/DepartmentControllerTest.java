@@ -1,4 +1,4 @@
-package com.hrsystem.employee.unit;
+package com.hrsystem.employee.unit.controller;
 
 import com.hrsystem.employee.controller.DepartmentController;
 import com.hrsystem.employee.dto.DepartmentCreateDto;
