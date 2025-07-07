@@ -60,7 +60,7 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Boolean>> delete(@PathVariable Long id) {
         boolean deleted = service.delete(id);
-        return ResponseEntity.ok(ApiResponse.success(HttpStatus.NO_CONTENT.value(), "Success", deleted));
+        return ResponseEntity.noContent().build();
     }
 
 
