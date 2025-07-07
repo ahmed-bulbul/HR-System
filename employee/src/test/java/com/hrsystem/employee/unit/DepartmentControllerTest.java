@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
-class DepartmentControllerUnitTest {
+class DepartmentControllerTest {
 
     @InjectMocks
     private DepartmentController controller;

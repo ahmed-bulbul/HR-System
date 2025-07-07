@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 👈 Add this
-class DepartmentControllerTest {
+class DepartmentIntegrationControllerTest {
 
     private static final String TENANT_SCHEMA = "test_tenant";
     private static final String BASE_URL = "/api/v1/department";
