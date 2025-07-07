@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     id BIGSERIAL PRIMARY KEY,
     entity_name VARCHAR(255) NOT NULL,
     entity_id BIGINT NOT NULL,
-    tenant_id BIGINT NOT NULL,
     action VARCHAR(50) NOT NULL,
     description TEXT,
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),

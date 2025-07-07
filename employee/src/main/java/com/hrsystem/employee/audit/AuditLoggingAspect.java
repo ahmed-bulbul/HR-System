@@ -1,6 +1,5 @@
 package com.hrsystem.employee.audit;
 
-import com.hrsystem.employee.context.TenantContext;
 import com.hrsystem.employee.util.AuditLoggerUtil;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;

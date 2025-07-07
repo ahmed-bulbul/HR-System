@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class AuditLogEvent {
     private String entityName;
     private Long entityId;
-    private Long tenantId;
     private String action;
     private String description;
     private String performedBy;

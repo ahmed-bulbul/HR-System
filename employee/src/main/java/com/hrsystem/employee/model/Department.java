@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.util.UUID;
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "departments")

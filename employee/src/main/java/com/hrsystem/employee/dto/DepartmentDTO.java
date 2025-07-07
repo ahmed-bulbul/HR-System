@@ -14,5 +14,4 @@ public class DepartmentDTO extends BaseDTO {
     private String departmentCode;
     private String description;
     private DepartmentStatus status;
-    private String tenantId;
 }
